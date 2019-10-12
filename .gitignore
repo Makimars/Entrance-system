@@ -1,2 +1,4 @@
-__pycache__
-Configuration App/build
+Configuration_App/__pycache__/
+Configuration_App/build
+Configuration App/__pycache__/mainwindow.cpython-37.pyc
+*.pyc

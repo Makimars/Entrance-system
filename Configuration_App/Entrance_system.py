@@ -1,10 +1,11 @@
 import sys, os
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 import mainwindow, serial
 import threading
 
 simple_mode = False
 numbers_list = []
+language =  "Czech"
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -19,13 +20,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.line_text_input.returnPressed.connect(self.commandEntered)
         self.ui.connect_device_button.clicked.connect(self.connectButtonClicked)
         self.ui.read_memory_button.clicked.connect(self.readMemoryButtonClicked)
+        
         self.ser = serial.Serial(baudrate=115200, timeout=1)
         self.read_thread = threading.Thread(target=self.readDevice)
+        
         if(simple_mode):
             self.ui.line_text_input.hide()
         
     def openFileButtonClicked(self):
-        fileName = QtWidgets.QFileDialog().getOpenFileName(self, "Otevřít soubor", "", "Csv soubory (*.csv *.txt)")
+        fileName = QtWidgets.QFileDialog().getOpenFileName(self, "Open file", "", "Csv files(*.csv )")
         if(os.path.exists(fileName)):
             file_stream = open(fileName[0], "r")
             content = file_stream.read()
@@ -35,16 +38,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     number = line.split(';')[2]
                     if(len(number) == 9):
                         numbers_list.append(number)
-            self.printMessage("Soubor načten")
+            self.printMessage(QtCore.QCoreApplication.translate("messages", "File loaded"))
         
 
     def loadFileButtonClicked(self):
         if(len(numbers_list) > 0):
             for number in numbers_list:
                 self.sendToDevice("a" + number)
-            self.printMessage("Soubor nahrán")
+            self.printMessage(QtCore.QCoreApplication.translate("messages", "File uploaded"))
         else:
-            self.printMessage("Souber není vybrán")
+            self.printMessage(QtCore.QCoreApplication.translate("messages", "File not selected"))
         
     def eraseMemoryButtonClicked(self):
         self.sendToDevice("e")
@@ -84,10 +87,10 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         if self.ser.is_open:
-            self.printMessage("Připojeno")
+            self.printMessage(QtCore.QCoreApplication.translate("messages", "Connected"))
             self.read_thread.start()
         else:
-            self.printMessage("Připojení selhalo")
+            self.printMessage(QtCore.QCoreApplication.translate("messages", "Connection failed"))
             
     def tryConnectDevice(self, address: str):
         self.ser.port = address
@@ -112,7 +115,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.ser.isOpen():
             self.ser.write(command.encode("ascii"))
         else:
-            self.printMessage("Zařízení nedostupné")
+            self.printMessage(QtCore.QCoreApplication.translate("messages", "Device not available"))
             
     def readDevice(self):
         input = self.ser.read_until()
@@ -143,6 +146,11 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.exec()
 
 app = QtWidgets.QApplication(sys.argv)
+
+app_translator = QtCore.QTranslator()
+if(language is not "English"):
+    app_translator.load(language + ".qm")
+app.installTranslator(app_translator)
 
 my_mainWindow = MainWindow()
 my_mainWindow.show()

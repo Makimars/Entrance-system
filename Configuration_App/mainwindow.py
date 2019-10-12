@@ -2,11 +2,12 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -59,12 +60,13 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Dveřní systém"))
-        self.open_file_button.setText(_translate("MainWindow", "Otevřít soubor"))
-        self.load_file_button.setText(_translate("MainWindow", "Nahrát soubor"))
-        self.erase_device_button.setText(_translate("MainWindow", "Vymazat paměť"))
-        self.read_memory_button.setText(_translate("MainWindow", "Přečíst paměť"))
-        self.add_number_button.setText(_translate("MainWindow", "Přidat číslo"))
-        self.connect_device_button.setText(_translate("MainWindow", "Připojit"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Entrance system"))
+        self.open_file_button.setText(_translate("MainWindow", "Open File"))
+        self.load_file_button.setText(_translate("MainWindow", "Upload File"))
+        self.erase_device_button.setText(_translate("MainWindow", "Clear memory"))
+        self.read_memory_button.setText(_translate("MainWindow", "Read memory"))
+        self.add_number_button.setText(_translate("MainWindow", "Add Number"))
+        self.connect_device_button.setText(_translate("MainWindow", "Connect"))
         self.actionQuit.setText(_translate("MainWindow", "&Quit"))
+
 

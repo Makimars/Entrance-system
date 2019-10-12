@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dveřní systém</string>
+   <string>Entrance system</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -20,28 +20,28 @@
       <item>
        <widget class="QPushButton" name="open_file_button">
         <property name="text">
-         <string>Otevřít soubor</string>
+         <string>Open File</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="load_file_button">
         <property name="text">
-         <string>Nahrát soubor</string>
+         <string>Upload File</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="erase_device_button">
         <property name="text">
-         <string>Vymazat paměť</string>
+         <string>Clear memory</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="read_memory_button">
         <property name="text">
-         <string>Přečíst paměť</string>
+         <string>Read memory</string>
         </property>
        </widget>
       </item>
@@ -55,7 +55,7 @@
       <item>
        <widget class="QPushButton" name="add_number_button">
         <property name="text">
-         <string>Přidat číslo</string>
+         <string>Add Number</string>
         </property>
        </widget>
       </item>
@@ -64,7 +64,7 @@
     <item>
      <widget class="QPushButton" name="connect_device_button">
       <property name="text">
-       <string>Připojit</string>
+       <string>Connect</string>
       </property>
      </widget>
     </item>

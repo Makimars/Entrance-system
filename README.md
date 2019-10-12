@@ -4,4 +4,4 @@ This is a software for a system with arduino, M950 GSM module and at24c256 EEPRO
 
 Dependencies: SoftwareSerial, [AT24Cx](https://github.com/cyberp/AT24Cx)
 
-This software is linced under EUPL v1.2, all language versions are located in folder LICENCE, and are equally valid.
+This software is linced under EUPL v1.2, other versions are located in folder LICENCE, and are equally valid.
