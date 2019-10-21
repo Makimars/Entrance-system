@@ -1,9 +1,10 @@
 import sys, os
 from PyQt5 import QtWidgets, QtCore
 import mainwindow, serial
-import threading
+import serial.tools.list_ports
+from ReadThread import ReadThread
 
-simple_mode = False
+simple_mode = True
 numbers_list = []
 language =  "Czech"
 
@@ -22,7 +23,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.read_memory_button.clicked.connect(self.readMemoryButtonClicked)
         
         self.ser = serial.Serial(baudrate=115200, timeout=1)
-        self.read_thread = threading.Thread(target=self.readDevice)
         
         if(simple_mode):
             self.ui.line_text_input.hide()
@@ -85,7 +85,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     print(port)
                     self.tryConnectDevice(port)
         
-        
         if self.ser.is_open:
             self.printMessage(QtCore.QCoreApplication.translate("messages", "Connected"))
             self.read_thread.start()
@@ -99,6 +98,8 @@ class MainWindow(QtWidgets.QMainWindow):
             input = self.ser.readline(4).decode("ascii")
             input = self.ser.readline(4).decode("ascii")
             if(input == "init"):
+                self.read_thread = ReadThread(self.ser)
+                self.read_thread.sig.connect(self.printInput)
                 return
         print("closed")
         self.ser.close()
@@ -123,6 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
         while True:
             if(len(input) > 0):
                 print(input.decode("ascii"))
+                self.printInput(input.decode("ascii"))
             input = self.ser.read_until()
             
     def printInput(self, message: str):
