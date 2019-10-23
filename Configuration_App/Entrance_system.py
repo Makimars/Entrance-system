@@ -4,7 +4,7 @@ import mainwindow, serial
 import serial.tools.list_ports
 from ReadThread import ReadThread
 
-simple_mode = True
+simple_mode = False
 numbers_list = []
 language =  "Czech"
 
@@ -28,12 +28,15 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.line_text_input.hide()
         
     def openFileButtonClicked(self):
+        print("open clicked")
         fileName = QtWidgets.QFileDialog().getOpenFileName(self, "Open file", "", "Csv files(*.csv )")
-        if(os.path.exists(fileName)):
+        if(os.path.exists(fileName[0])):
+            print("file exist" + fileName[0])
             file_stream = open(fileName[0], "r")
             content = file_stream.read()
             lines = content.split('\n')
             for line in lines:
+                print(line)
                 if(len(line.split(';')) > 2):
                     number = line.split(';')[2]
                     if(len(number) == 9):
@@ -42,13 +45,16 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     def loadFileButtonClicked(self):
-        if(len(numbers_list) > 0):
-            for number in numbers_list:
-                self.sendToDevice("a" + number)
-            self.printMessage(QtCore.QCoreApplication.translate("messages", "File uploaded"))
+        if(self.ser.is_open):
+            if(len(numbers_list) > 0):
+                for number in numbers_list:
+                    self.sendToDevice("a" + number)
+                self.printMessage(QtCore.QCoreApplication.translate("messages", "File uploaded"))
+            else:
+                self.printMessage(QtCore.QCoreApplication.translate("messages", "File not selected"))
         else:
-            self.printMessage(QtCore.QCoreApplication.translate("messages", "File not selected"))
-        
+            self.printMessage(QtCore.QCoreApplication.translate("messages", "Device not connected"))
+            
     def eraseMemoryButtonClicked(self):
         self.sendToDevice("e")
         
@@ -95,8 +101,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ser.port = address
         self.ser.open()
         if(self.ser.isOpen()):
-            input = self.ser.readline(4).decode("ascii")
-            input = self.ser.readline(4).decode("ascii")
+            self.ser.read_until()
+            input = self.ser.read(4).decode("ascii")
             if(input == "init"):
                 self.read_thread = ReadThread(self.ser)
                 self.read_thread.sig.connect(self.printInput)

@@ -28,7 +28,7 @@ void setup() {
   Serial.begin(115200);
   serial_gsm.begin(19200);
   //show the callers number
-  //serial_gsm.write("AT+CLIP=1\r");
+  serial_gsm.write("AT+CLIP=1\r");
   Serial.println("init");
   Wire.begin();
 }
@@ -196,7 +196,7 @@ void openDoor(){
   Serial.println("door opened");
   digitalWrite(RELAY_PIN,HIGH);
   digitalWrite(LED_PIN,HIGH);
-  delay(5000);
+  delay(3000);
   digitalWrite(RELAY_PIN,LOW);
   digitalWrite(LED_PIN,LOW);
 }

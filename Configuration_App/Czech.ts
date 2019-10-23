@@ -74,7 +74,7 @@
     <message>
         <location filename="Entrance_system.py" line="123"/>
         <source>Device not available</source>
-        <translation type="unfinished">Zařízení nedostupné</translation>
+        <translation>Zařízení nedostupné</translation>
     </message>
 </context>
 </TS>
