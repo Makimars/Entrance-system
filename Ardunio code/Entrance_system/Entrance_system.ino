@@ -29,6 +29,8 @@ void setup() {
   serial_gsm.begin(19200);
   //show the callers number
   serial_gsm.write("AT+CLIP=1\r");
+  delay(50);
+  while(serial_gsm.available()) serial_gsm.read();
   Serial.println("init");
   Wire.begin();
 }
@@ -40,7 +42,7 @@ void loop() {
   if(serial_gsm.available()){
     handleGsmCommunication();
   }
-  delay(100);
+  delay(1);
 }
 
 void handleGsmCommunication(){
@@ -172,13 +174,16 @@ void callRecieved(char tel_number[9]){
   }
   Serial.println();
   
-  unsigned int address;
+  unsigned long address = 0;
   char buff[9];
-  
-  for(byte i = 0; i < number_count; i++){
+ 
+  for(unsigned int i = 0; i < number_count; i++){
     
     address = (i * 9) + 2;
+    
     eeprom.read(address, (byte *) buff, 9);
+    //Serial.println(address);
+
     
     for(byte a = 0; a < 9; a++){
       if(buff[a] != tel_number[a]) break;

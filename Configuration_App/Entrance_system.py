@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, time
 from PyQt5 import QtWidgets, QtCore
 import mainwindow, serial
 import serial.tools.list_ports
@@ -21,7 +21,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.line_text_input.returnPressed.connect(self.commandEntered)
         self.ui.connect_device_button.clicked.connect(self.connectButtonClicked)
         self.ui.read_memory_button.clicked.connect(self.readMemoryButtonClicked)
-        
         self.ser = serial.Serial(baudrate=115200, timeout=1)
         
         if(simple_mode):
@@ -49,6 +48,8 @@ class MainWindow(QtWidgets.QMainWindow):
             if(len(numbers_list) > 0):
                 for number in numbers_list:
                     self.sendToDevice("a" + number)
+                    print( number + " added")
+                    time.sleep(0.5)
                 self.printMessage(QtCore.QCoreApplication.translate("messages", "File uploaded"))
             else:
                 self.printMessage(QtCore.QCoreApplication.translate("messages", "File not selected"))
