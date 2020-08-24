@@ -1,10 +1,10 @@
-//#include <Eeprom_at24c256.h>
-
 #include <Wire.h>
+
 //#include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
-#include <AT24CX.h>
+
 //#include <Eeprom_at24c256.h>
+#include <AT24CX.h>
 
 #define ADD_NUMBER      'a'
 #define ERASE_NUMBERS   'e'
@@ -16,6 +16,10 @@
 #define LED_PIN         12
 #define RELAY_PIN       7
 
+#define OPENING_TIME 3000
+
+#define SERIAL_TEST true
+
 //Eeprom_at24c256 eeprom(0x50);
 AT24C256 eeprom(0x50);
 
@@ -26,11 +30,15 @@ void setup() {
   pinMode(8, OUTPUT);
   pinMode(12,OUTPUT);
   Serial.begin(115200);
-  serial_gsm.begin(19200);
-  //show the callers number
-  serial_gsm.write("AT+CLIP=1\r");
-  delay(50);
-  while(serial_gsm.available()) serial_gsm.read();
+
+  #ifndef SERIAL_TEST
+    serial_gsm.begin(19200);
+    //show the callers number
+    serial_gsm.write("AT+CLIP=1\r");
+    delay(50);
+    while(serial_gsm.available()) serial_gsm.read();
+  #endif
+  
   Serial.println("init");
   Wire.begin();
 }
@@ -39,9 +47,13 @@ void loop() {
   if(Serial.available()){
     handleSerialCommunication();
   }
-  if(serial_gsm.available()){
-    handleGsmCommunication();
-  }
+  
+  #ifndef SERIAL_TEST
+    if(serial_gsm.available()){
+      handleGsmCommunication();
+    }
+  #endif
+    
   delay(1);
 }
 
@@ -86,9 +98,9 @@ void handleGsmCommunication(){
         }
 
         //recieved number
-        //for(byte i = 0; i < 9; i++)
-        //  Serial.print(number[i]);
-        //Serial.println("");
+        for(byte i = 0; i < 9; i++)
+          Serial.print(number[i]);
+        Serial.println("");
 
 
         // read until the end
@@ -201,7 +213,7 @@ void openDoor(){
   Serial.println("door opened");
   digitalWrite(RELAY_PIN,HIGH);
   digitalWrite(LED_PIN,HIGH);
-  delay(3000);
+  delay(OPENING_TIME);
   digitalWrite(RELAY_PIN,LOW);
   digitalWrite(LED_PIN,LOW);
 }
