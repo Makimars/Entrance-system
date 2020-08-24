@@ -4,3 +4,5 @@ Configuration App/__pycache__/mainwindow.cpython-37.pyc
 *.pyc
 dist
 build
+.idea
+venv
