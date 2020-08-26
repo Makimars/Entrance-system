@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import serial
 
+
 class ReadThread(QThread):
     sig = pyqtSignal(str)
     
@@ -15,7 +16,7 @@ class ReadThread(QThread):
         input = self.ser.read_until()
         
         while True:
-            if(self.ser.is_open):
+            if self.ser.is_open:
                 input = self.ser.read_until().decode("ascii")
                 if(len(input) > 0):
                     self.sig.emit(input)

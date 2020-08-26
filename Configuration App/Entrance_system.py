@@ -29,7 +29,7 @@ from serial import Serial
 import mainwindow
 from ReadThread import ReadThread
 
-simple_mode = False
+simple_mode = True
 numbers_list = []
 language = "Czech"
 
@@ -71,11 +71,21 @@ class MainWindow(QtWidgets.QMainWindow):
     def loadFileButtonClicked(self):
         if self.ser.is_open:
             if len(numbers_list) > 0:
+                self.read_thread.terminate()
                 for number in numbers_list:
                     self.sendToDevice("a" + number)
                     print(number + " added")
-                    time.sleep(0.5)
+
+                    response = ""
+                    while True:
+                        line = self.ser.read_all().decode("ascii")
+                        response += line
+                        if response.strip() == "ok":
+                            break
+                        time.sleep(0.03)
+
                 self.printMessage(QtCore.QCoreApplication.translate("messages", "File uploaded"))
+                self.read_thread.start()
             else:
                 self.printMessage(QtCore.QCoreApplication.translate("messages", "File not selected"))
         else:
@@ -162,7 +172,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def printInput(self, message: str):
         if not simple_mode:
             self.ui.text_output.insertHtml("Device: " + message + "<br>")
-        elif len(message) == 11:
+        else:
             self.ui.text_output.insertHtml(message + "<br>")
 
     def printOutput(self, message: str):

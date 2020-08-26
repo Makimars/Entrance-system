@@ -18,7 +18,7 @@
 
 #define OPENING_TIME 3000
 
-#define SERIAL_TEST true
+#define SERIAL_TEST false
 
 //Eeprom_at24c256 eeprom(0x50);
 AT24C256 eeprom(0x50);
@@ -131,9 +131,7 @@ void handleSerialCommunication(){
       char number[9];
       Serial.readBytes(number, 9);
       addTelNumber(number);
-      Serial.print("adding number: ");
-      for(byte a = 0; a < 9; a++) Serial.print(number[a]);
-      Serial.println("");
+      Serial.println("ok");
       break;
     case ERASE_NUMBERS:
       eeprom.write(0, buff, 2);
