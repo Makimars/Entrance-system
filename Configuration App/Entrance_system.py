@@ -47,6 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.line_text_input.returnPressed.connect(self.commandEntered)
         self.ui.connect_device_button.clicked.connect(self.connectButtonClicked)
         self.ui.read_memory_button.clicked.connect(self.readMemoryButtonClicked)
+        self.ui.get_number_count_button.clicked.connect(self.getNumberCount)
         self.ser = Serial(baudrate=115200, timeout=1)
 
         if simple_mode:
@@ -132,6 +133,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.read_thread.start()
         else:
             self.printMessage(QtCore.QCoreApplication.translate("messages", "Connection failed"))
+
+    def getNumberCount(self):
+        self.printMessage(QtCore.QCoreApplication.translate("messages", "Messages count:"))
+        self.sendToDevice("c")
 
     def tryConnectDevice(self, address: str):
         print(address)

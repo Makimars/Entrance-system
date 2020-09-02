@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -12,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(490, 444)
+        MainWindow.resize(698, 444)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -31,6 +32,9 @@ class Ui_MainWindow(object):
         self.read_memory_button = QtWidgets.QPushButton(self.centralwidget)
         self.read_memory_button.setObjectName("read_memory_button")
         self.horizontalLayout.addWidget(self.read_memory_button)
+        self.get_number_count_button = QtWidgets.QPushButton(self.centralwidget)
+        self.get_number_count_button.setObjectName("read_memory_button_2")
+        self.horizontalLayout.addWidget(self.get_number_count_button)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -65,8 +69,7 @@ class Ui_MainWindow(object):
         self.load_file_button.setText(_translate("MainWindow", "Upload File"))
         self.erase_device_button.setText(_translate("MainWindow", "Clear memory"))
         self.read_memory_button.setText(_translate("MainWindow", "Read memory"))
+        self.get_number_count_button.setText(_translate("MainWindow", "Get number count"))
         self.add_number_button.setText(_translate("MainWindow", "Add Number"))
         self.connect_device_button.setText(_translate("MainWindow", "Connect"))
         self.actionQuit.setText(_translate("MainWindow", "&Quit"))
-
-

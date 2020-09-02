@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
+    <width>698</width>
     <height>444</height>
    </rect>
   </property>
@@ -42,6 +42,13 @@
        <widget class="QPushButton" name="read_memory_button">
         <property name="text">
          <string>Read memory</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="read_memory_button_2">
+        <property name="text">
+         <string>Get number count</string>
         </property>
        </widget>
       </item>
