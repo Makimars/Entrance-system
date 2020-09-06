@@ -13,31 +13,28 @@
 #define PING            'p'
 #define TEST            't'
 
-#define LED_PIN         12
+#define LED_PIN         13
 #define RELAY_PIN       7
 
 #define OPENING_TIME 3000
-
-#define SERIAL_TEST false
 
 //Eeprom_at24c256 eeprom(0x50);
 AT24C256 eeprom(0x50);
 
 //AltSoftSerial serial_gsm(10,12); //RX, TX
-SoftwareSerial serial_gsm(10,13); //RX, TX
+SoftwareSerial serial_gsm(10,8); //RX, TX
 
 void setup() {
-  pinMode(8, OUTPUT);
-  pinMode(12,OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(LED_PIN,OUTPUT);
   Serial.begin(115200);
 
-  #ifndef SERIAL_TEST
     serial_gsm.begin(19200);
     //show the callers number
     serial_gsm.write("AT+CLIP=1\r");
     delay(50);
     while(serial_gsm.available()) serial_gsm.read();
-  #endif
+    Serial.println("gsm");
   
   Serial.println("init");
   Wire.begin();
@@ -48,12 +45,10 @@ void loop() {
     handleSerialCommunication();
   }
   
-  #ifndef SERIAL_TEST
     if(serial_gsm.available()){
       handleGsmCommunication();
     }
-  #endif
-    
+
   delay(1);
 }
 
