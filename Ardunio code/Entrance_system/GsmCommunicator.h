@@ -25,6 +25,7 @@ class GsmCommunicator{
     void openDoor();
 };
 
+
 GsmCommunicator::GsmCommunicator(byte RX, byte TX, byte relay_pin, byte led_pin)
 {
   this->relay_pin = relay_pin;
@@ -104,7 +105,6 @@ void GsmCommunicator::handleCommunication(){
     }
   }
 }
-
 
 void GsmCommunicator::callRecieved(char tel_number[9]){
   unsigned int number_count = memory->getNumberCount();
