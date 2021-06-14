@@ -2,7 +2,6 @@
 #define SERIAL_COMMUNICATOR_H
 
 #include <Wire.h>
-
 #include "MemoryReader.h"
 
 #define ADD_NUMBER      'a'
