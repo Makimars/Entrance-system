@@ -1,5 +1,8 @@
 #include <Wire.h>
 
+#include "MemoryReader.h"
+#include "GsmCommunicator.h"
+
 //#include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
 
@@ -18,8 +21,7 @@
 
 #define OPENING_TIME 3000
 
-//Eeprom_at24c256 eeprom(0x50);
-AT24C256 eeprom(0x50);
+MemoryReader memory;
 
 //AltSoftSerial serial_gsm(10,12); //RX, TX
 SoftwareSerial serial_gsm(10,8); //RX, TX
@@ -125,19 +127,18 @@ void handleSerialCommunication(){
     case ADD_NUMBER:
       char number[9];
       Serial.readBytes(number, 9);
-      addTelNumber(number);
+      memory.addTelNumber(number);
       Serial.println("ok");
       break;
     case ERASE_NUMBERS:
-      eeprom.write(0, buff, 2);
-      Serial.println("Memory cleared");
+      memory.eraseNumbers();
       break;  
     case READ_NUMBERS:
       readAll();
       break;
     case NUMBER_COUNT:
       Serial.print("count: ");
-      Serial.println(getNumberCount());
+      Serial.println(memory.getNumberCount());
       break;
     case PING:
       Serial.println("ping");
@@ -156,22 +157,21 @@ void handleSerialCommunication(){
 }
 
 void readAll(){
-  unsigned int number_count = getNumberCount();
+  unsigned int number_count = memory.getNumberCount();
 
   unsigned int address;
-  char buff[9];
+  String tel_number;
+
   for(byte i = 0; i < number_count; i++){
     address = (i * 9) + 2;
-    eeprom.read(address, (byte *) buff, 9);
-    //Serial.println(sizeof(buff));
-    for(byte a = 0; a < 9; a++) Serial.print(buff[a]);
-    Serial.println("");
+    tel_number = memory.readTelNumber(address);
+    Serial.println(tel_number);
   }
     
 }
 
 void callRecieved(char tel_number[9]){
-  unsigned int number_count = getNumberCount();
+  unsigned int number_count = memory.getNumberCount();
 
   Serial.print("recieving: ");
   for(byte a = 0; a < 9; a++){
@@ -180,13 +180,13 @@ void callRecieved(char tel_number[9]){
   Serial.println();
   
   unsigned long address = 0;
-  char buff[9];
+  String buff;
  
   for(unsigned int i = 0; i < number_count; i++){
     
     address = (i * 9) + 2;
     
-    eeprom.read(address, (byte *) buff, 9);
+    buff = memory.readTelNumber(address);
     //Serial.println(address);
 
     
@@ -211,29 +211,3 @@ void openDoor(){
   digitalWrite(LED_PIN,LOW);
 }
 
-void addTelNumber(char number[9]){
-  unsigned int number_count = getNumberCount();
-
-  unsigned int address = (number_count * 9) + 2;
-  eeprom.write(address, number, 9);
-
-  delay(200);
-  number_count++;
-  byte count_buff[2] = {
-    number_count >> 8,
-    number_count
-  };
-  eeprom.write(0, count_buff, 2);
-}
-
-String readTelNumber(unsigned int address){
-  char buff[9];
-  eeprom.read(address, (byte *) buff, sizeof(buff));
-  return buff;
-}
-
-unsigned int getNumberCount(){
-  byte buff[2];
-  eeprom.read(0, buff, 2);
-  return (buff[0] << 8) + buff[1];
-}
