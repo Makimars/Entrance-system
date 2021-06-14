@@ -1,20 +1,11 @@
 #include <Wire.h>
 
 #include "MemoryReader.h"
-#include "GsmCommunicator.h"
+//#include "GsmCommunicator.h"
+#include "SerialCommunicator.h"
 
 //#include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
-
-//#include <Eeprom_at24c256.h>
-#include <AT24CX.h>
-
-#define ADD_NUMBER      'a'
-#define ERASE_NUMBERS   'e'
-#define READ_NUMBERS    'r'
-#define NUMBER_COUNT    'c'    
-#define PING            'p'
-#define TEST            't'
 
 #define LED_PIN         13
 #define RELAY_PIN       7
@@ -22,6 +13,7 @@
 #define OPENING_TIME 3000
 
 MemoryReader memory;
+SerialCommunicator serial;
 
 //AltSoftSerial serial_gsm(10,12); //RX, TX
 SoftwareSerial serial_gsm(10,8); //RX, TX
@@ -29,23 +21,20 @@ SoftwareSerial serial_gsm(10,8); //RX, TX
 void setup() {
   pinMode(RELAY_PIN, OUTPUT);
   pinMode(LED_PIN,OUTPUT);
-  Serial.begin(115200);
+  
+  serial = SerialCommunicator();
 
     serial_gsm.begin(19200);
     //show the callers number
     serial_gsm.write("AT+CLIP=1\r");
     delay(50);
     while(serial_gsm.available()) serial_gsm.read();
-    Serial.println("gsm");
   
-  Serial.println("init");
   Wire.begin();
 }
 
 void loop() {
-  if(Serial.available()){
-    handleSerialCommunication();
-  }
+  serial.handleCommunication();
   
     if(serial_gsm.available()){
       handleGsmCommunication();
@@ -117,58 +106,8 @@ void handleGsmCommunication(){
   }
 } 
 
-void handleSerialCommunication(){
-  char cmd = Serial.read();
-  //Serial.println(cmd);
-  byte buff[2] = {0,0};
-  unsigned int number_count = 0;
 
-  switch(cmd){
-    case ADD_NUMBER:
-      char number[9];
-      Serial.readBytes(number, 9);
-      memory.addTelNumber(number);
-      Serial.println("ok");
-      break;
-    case ERASE_NUMBERS:
-      memory.eraseNumbers();
-      break;  
-    case READ_NUMBERS:
-      readAll();
-      break;
-    case NUMBER_COUNT:
-      Serial.print("count: ");
-      Serial.println(memory.getNumberCount());
-      break;
-    case PING:
-      Serial.println("ping");
-      break;
-    case TEST:
-      char num[9];
-      Serial.readBytes(num, 9);
-      callRecieved(num);
-      break;
-   /* default:
-      Serial.print(cmd);
-      Serial.println(" not recognized");
-      break;*/
-  }
-    
-}
 
-void readAll(){
-  unsigned int number_count = memory.getNumberCount();
-
-  unsigned int address;
-  String tel_number;
-
-  for(byte i = 0; i < number_count; i++){
-    address = (i * 9) + 2;
-    tel_number = memory.readTelNumber(address);
-    Serial.println(tel_number);
-  }
-    
-}
 
 void callRecieved(char tel_number[9]){
   unsigned int number_count = memory.getNumberCount();
