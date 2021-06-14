@@ -7,8 +7,8 @@
 
 class MemoryReader {
 
- public:
-    MemoryReader(){}
+  public:
+    static MemoryReader *getInstance();
 
     void addTelNumber(char number[9]);
     String readTelNumber(unsigned int address);
@@ -16,10 +16,23 @@ class MemoryReader {
     void eraseNumbers();
 
   private:
+    static MemoryReader *instance;
+
+    MemoryReader(){}
     AT24C256 eeprom;  
 
 };
 
+MemoryReader *MemoryReader::instance = nullptr;
+
+MemoryReader *MemoryReader::getInstance(){
+  if(MemoryReader::instance == nullptr)
+  {
+    MemoryReader::instance = new MemoryReader();
+  }
+
+  return MemoryReader::instance;
+}
 
 void MemoryReader::addTelNumber(char number[9]){
   unsigned int number_count = getNumberCount();

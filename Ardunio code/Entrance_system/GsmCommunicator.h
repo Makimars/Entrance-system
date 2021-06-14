@@ -7,6 +7,7 @@
 
 #define OPENING_TIME 3000
 
+//is global variable, should be made a class var
 SoftwareSerial soft_serial(10,8);
 
 class GsmCommunicator{
@@ -18,7 +19,7 @@ class GsmCommunicator{
     //SoftwareSerial soft_serial;
     byte relay_pin, led_pin;
 
-    MemoryReader memory;
+    MemoryReader *memory;
 
     void callRecieved(char tel_number[9]);
     void openDoor();
@@ -30,7 +31,7 @@ GsmCommunicator::GsmCommunicator(byte RX, byte TX, byte relay_pin, byte led_pin)
   this->led_pin = led_pin;
   
   //this->soft_serial = SoftwareSerial(RX, TX, false);
-  this->memory = MemoryReader();
+  this->memory = MemoryReader::getInstance();
 
   soft_serial.begin(19200);
   //show the callers number in soft_serial
@@ -106,7 +107,7 @@ void GsmCommunicator::handleCommunication(){
 
 
 void GsmCommunicator::callRecieved(char tel_number[9]){
-  unsigned int number_count = memory.getNumberCount();
+  unsigned int number_count = memory->getNumberCount();
 
   Serial.print("recieving: ");
   for(byte a = 0; a < 9; a++){
@@ -120,7 +121,7 @@ void GsmCommunicator::callRecieved(char tel_number[9]){
   for(unsigned int i = 0; i < number_count; i++){
 
     address = (i * 9) + 2;
-    number = memory.readTelNumber(address);
+    number = memory->readTelNumber(address);
 
     for(byte a = 0; a < 9; a++){
 
