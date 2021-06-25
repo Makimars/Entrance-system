@@ -11,7 +11,9 @@
 #define RELAY_PIN 7
 
 SerialCommunicator serial;
-GsmCommunicator gsm(GSM_RX, GSM_TX, RELAY_PIN, LED_PIN);
+
+SoftwareSerial gsm_serial(GSM_RX, GSM_TX);
+GsmCommunicator gsm(&gsm_serial, RELAY_PIN, LED_PIN);
 
 void setup() {
   pinMode(RELAY_PIN, OUTPUT);

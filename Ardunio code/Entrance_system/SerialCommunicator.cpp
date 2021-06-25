@@ -37,6 +37,7 @@ void SerialCommunicator::handleCommunication(){
     case TEST:
       char num[9];
       Serial.readBytes(num, 9);
+      Serial.println("depreceated command")
       //callRecieved(num);
       break;
     default:
@@ -50,11 +51,9 @@ void SerialCommunicator::readAll(){
   unsigned int number_count = memory->getNumberCount();
 
   unsigned int address;
-  String tel_number;
 
   for(byte i = 0; i < number_count; i++){
     address = (i * 9) + 2;
-    tel_number = memory->readTelNumber(address);
-    Serial.println(tel_number);
+    Serial.println(memory->readTelNumber(address));
   }
 }
