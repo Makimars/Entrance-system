@@ -4,6 +4,9 @@
 #include "GsmCommunicator.h"
 #include "SerialCommunicator.h"
 
+// disable gsm when testing serial communication
+//#define NO_GSM
+
 #define GSM_RX  10
 #define GSM_TX  8
 
@@ -24,7 +27,10 @@ void setup() {
 
 void loop() {
   serial.handleCommunication();
+
+#ifndef NO_GSM
   gsm.handleCommunication();
+#endif
 
   delay(1);
 }
