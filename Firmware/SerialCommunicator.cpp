@@ -37,7 +37,7 @@ void SerialCommunicator::handleCommunication(){
     case TEST:
       char num[9];
       Serial.readBytes(num, 9);
-      Serial.println("depreceated command")
+      Serial.println("depreceated command");
       //callRecieved(num);
       break;
     default:
